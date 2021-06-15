@@ -68,13 +68,13 @@ def create_vcal(todo):
     body = f"""BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:FringeDivision
-BEGIN:VTODO
+BEGIN:VEVENT
 UID:{uid}@example.com
 DTSTAMP:{today}
-DTSTART;VALUE=DATE:{task_start_date}
-DUE;VALUE=DATE:{task_due_date}
+DTSTART:{task_start_date}
+DTEND:{task_due_date}
 SUMMARY:{summary}
-END:VTODO
+END:VEVENT
 END:VCALENDAR
     """
 
@@ -92,7 +92,7 @@ def return_calendar_object():
     calendar = [i for i in calendars if i.get_properties(
         [dav.DisplayName()])['{DAV:}displayname'] == calendar_name][0]
 
-    ### doesn't work with mailbox.org
+    # ## doesn't work with mailbox.org
     # ### delete calendar & create an empty one
     # calendar_name = os.environ['calendar_name']
     # calendars = my_principal.calendars()
@@ -115,13 +115,13 @@ if __name__ == "__main__":
 
     ### clear entries
     print('clearing entries...')
-    for i in calendar.todos():
+    for i in calendar.events():
         i.delete()
 
     ### add todo to caldav
     for todo in todos:
         vcal = create_vcal(todo)
-        calendar.add_todo(vcal)
+        calendar.save_event(vcal)
 
         task_name = todo['todo']
         print(f'added: {task_name}')
