@@ -1,3 +1,6 @@
 #!/bin/bash
 
-python3 main.py
+while true; do
+    python3 main.py;
+    sleep $update_interval;
+done

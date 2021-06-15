@@ -14,5 +14,6 @@ services:
       caldav_username: ${caldav_username}
       caldav_password: ${caldav_password}
       calendar_name: ${calendar_name}
+      update_interval: 300 # 5 minutes
       TZ: Asia/Bangkok
-    # restart: unless-stopped
+    restart: unless-stopped
