@@ -1,13 +1,14 @@
-import os
-import pandas as pd
-import numpy as np
-import uuid
+from caldav.elements import dav, cdav
+from datetime import datetime, timedelta
 from dateutil.parser import parse
 from pytz import timezone
-import json
-from datetime import datetime, timedelta
-from caldav.elements import dav, cdav
 import caldav
+import json
+import numpy as np
+import os
+import pandas as pd
+import requests
+import uuid
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -15,8 +16,20 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def parse_todos():
     ### read todo.txt
-    with open(os.environ['todo_path'], 'r') as f:
-        todos = [i.strip() for i in f.readlines()]
+    todo_path = os.environ['todo_path']
+    if todo_path:    
+        # read from file
+        with open(todo_path, 'r') as f:
+            todos = [i.strip() for i in f.readlines()]
+
+    else:
+        # read from webdav
+        url = os.environ['todo_url']
+        webdav_username = os.environ['webdav_username']
+        webdav_password = os.environ['webdav_password']
+    
+        todos = requests.get(url, auth=(webdav_username, webdav_password)).text
+        todos = [i.strip() for i in todos.split('\n')]
 
     ### processing
     df = pd.DataFrame()
