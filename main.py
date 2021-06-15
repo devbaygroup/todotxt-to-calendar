@@ -55,12 +55,12 @@ def create_vcal(todo):
     today = today.strftime("%Y%m%dT%H%M%SZ")
 
     task_start_date = todo['due_date']
-    task_start_date = timezone('Asia/Bangkok').localize(parse(task_start_date))
-    task_start_date = task_start_date.astimezone(utc)
+    task_start_date = parse(task_start_date).date()
+
     task_due_date = task_start_date+timedelta(days=1)
 
-    task_start_date = task_start_date.strftime("%Y%m%dT%H%M%SZ")
-    task_due_date = task_due_date.strftime("%Y%m%dT%H%M%SZ")
+    task_start_date = str(task_start_date).replace('-', '')
+    task_due_date = str(task_due_date).replace('-', '')
 
     uid = uuid.uuid4()
 
@@ -71,8 +71,8 @@ PRODID:FringeDivision
 BEGIN:VEVENT
 UID:{uid}@example.com
 DTSTAMP:{today}
-DTSTART:{task_start_date}
-DTEND:{task_due_date}
+DTSTART;VALUE=DATE:{task_start_date}
+DTEND;VALUE=DATE:{task_due_date}
 SUMMARY:{summary}
 END:VEVENT
 END:VCALENDAR
