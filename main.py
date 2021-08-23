@@ -1,4 +1,6 @@
-from utils.utils import *
+from utils.utils import create_vcal
+from utils.utils import parse_todos
+from utils.utils import return_calendar_object
 
 
 if __name__ == "__main__":
@@ -6,7 +8,7 @@ if __name__ == "__main__":
     calendar = return_calendar_object()
 
     ### clear entries
-    print('clearing entries...')
+    print("clearing entries...")
     for i in calendar.events():
         i.delete()
 
@@ -15,5 +17,5 @@ if __name__ == "__main__":
         vcal = create_vcal(todo)
         calendar.save_event(vcal)
 
-        task_name = todo['todo']
-        print(f'added: {task_name}')
+        task_name = todo["todo"]
+        print(f"added: {task_name}")
